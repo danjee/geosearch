@@ -17,8 +17,8 @@ public class SearchServiceImpl implements SearchService {
 	private SearchDAO searchDAO;
 
 	@Override
-	public List<GeoEntity> search(double latitude, double longitude, String key) {
-		return searchDAO.search(latitude, longitude, key);
+	public List<GeoEntity> search(double latitude, double longitude,int firstResult, int maxResults, String key) {
+		return searchDAO.search(latitude, longitude,firstResult, maxResults, key);
 	}
 
 	@Override

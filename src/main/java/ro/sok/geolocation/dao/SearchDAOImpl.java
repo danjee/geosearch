@@ -26,7 +26,7 @@ public class SearchDAOImpl implements SearchDAO {
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public List<GeoEntity> search(double latitude, double longitude, String key){
+	public List<GeoEntity> search(double latitude, double longitude,int firstResult, int maxResults, String key){
 		List<GeoEntity> resultList = new ArrayList<>();
 		FullTextSession searchSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
 		QueryBuilder queryBuilder = searchSession.getSearchFactory().buildQueryBuilder().forEntity( GeoEntity.class ).get();
@@ -35,7 +35,7 @@ public class SearchDAOImpl implements SearchDAO {
 		
 		
 		Query spatialLuceneQuery = queryBuilder.spatial()
-				.within( 100, Unit.KM )
+				.within( 200, Unit.KM )
 				.ofLatitude( latitude )
 				.andLongitude( longitude )
 				.createQuery();
@@ -56,7 +56,8 @@ public class SearchDAOImpl implements SearchDAO {
 		Sort distanceSort = new Sort(
 		    new DistanceSortField(latitude, longitude, Spatial.COORDINATES_DEFAULT_FIELD));
 		hibQuery.setSort(distanceSort);
-		
+		hibQuery.setFirstResult(firstResult);
+		hibQuery.setMaxResults(maxResults);
 		List<?> tmpList = hibQuery.list();
 		for ( Object obj[] : (List<Object[]>) tmpList ) {
 			GeoEntity entity = (GeoEntity) obj[0];
