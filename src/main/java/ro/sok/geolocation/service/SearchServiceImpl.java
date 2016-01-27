@@ -20,4 +20,14 @@ public class SearchServiceImpl implements SearchService {
 	public List<GeoEntity> search(double latitude, double longitude, String key) {
 		return searchDAO.search(latitude, longitude, key);
 	}
+
+	@Override
+	public void addEntry(GeoEntity ge) {
+		searchDAO.addEntry(ge);
+	}
+
+	@Override
+	public void reindex() {
+		searchDAO.reindex();
+	}
 }

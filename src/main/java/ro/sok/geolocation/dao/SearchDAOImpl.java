@@ -44,7 +44,7 @@ public class SearchDAOImpl implements SearchDAO {
 		Query termLuceneQuery = queryBuilder
 				  .keyword()
 				  .onFields("value")
-				  .matching("Java rocks!")
+				  .matching(key)
 				  .createQuery();
 		bool.must(termLuceneQuery);
 		
@@ -64,5 +64,20 @@ public class SearchDAOImpl implements SearchDAO {
 			resultList.add( entity );
 		}
 		return resultList;
+	}
+
+	@Override
+	public void addEntry(GeoEntity ge) {
+		sessionFactory.getCurrentSession().persist(ge);
+	}
+
+	@Override
+	public void reindex() {
+		FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+		try {
+			fullTextSession.createIndexer().startAndWait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

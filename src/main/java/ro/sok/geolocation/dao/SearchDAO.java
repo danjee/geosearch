@@ -8,4 +8,8 @@ public interface SearchDAO {
 
 	List<GeoEntity> search(double latitude, double longitude, String key);
 
+	void addEntry(GeoEntity ge);
+
+	void reindex();
+
 }
